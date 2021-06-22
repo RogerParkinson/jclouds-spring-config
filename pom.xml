@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>nz.co.senanque</groupId>
 	<artifactId>jclouds-spring-config</artifactId>
-	<version>0.0.1-RELEASE</version>
+	<version>0.0.23-RELEASE</version>
 	<name>jclouds-spring-config</name>
 	<description>Configure Apache Jclouds using Spring</description>
 
@@ -216,7 +216,7 @@
 						<configuration>
 							<serverId>ossrh</serverId>
 							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+<!-- 							<autoReleaseAfterClose>true</autoReleaseAfterClose> -->
 							<description>${project.version}</description>
 						</configuration>
                         <executions>
