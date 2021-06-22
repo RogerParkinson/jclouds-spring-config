@@ -3,6 +3,8 @@ Configure Apache Jclouds blob storage using Spring
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/nz.co.senanque/jclouds-spring-config/badge.svg)](http://mvnrepository.com/artifact/nz.co.senanque/jclouds-spring-config)
 
+[![Java with Nexus Repository](https://github.com/RogerParkinson/jclouds-spring-config/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/RogerParkinson/jclouds-spring-config/actions/workflows/maven-publish.yml)
+
 ## Purpose
 
 Provides a simple helper that can be injected with parameters to determine what kind of bucket to access and any necessary credentials. The helper
