@@ -29,7 +29,7 @@ jobs:
 
     - name: Test
       run: |
-        echo $RELEASE_VERSION
+        echo ${{ github.event.release.tag_name }}
         echo ${{ env.RELEASE_VERSION }}
         echo $MAVEN_GPG_PASSPHRASE
         echo ${{ secrets.MAVEN_GPG_PASSPHRASE }}
