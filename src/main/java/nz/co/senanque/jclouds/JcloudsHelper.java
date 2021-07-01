@@ -5,10 +5,12 @@ package nz.co.senanque.jclouds;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
 import org.jclouds.ContextBuilder;
+import org.jclouds.blobstore.BlobStore;
 import org.jclouds.blobstore.BlobStoreContext;
 import org.jclouds.domain.Credentials;
 import org.jclouds.googlecloud.GoogleCredentialsFromJson;
@@ -37,6 +39,8 @@ public class JcloudsHelper {
 	String credential;
 	Supplier<Credentials> credentialsSupplier;
 	
+	ThreadLocal<BlobStoreContext> blobStoreContext = new ThreadLocal<>();
+	
 	@PostConstruct
 	@SneakyThrows
 	public void init() {
@@ -60,8 +64,40 @@ public class JcloudsHelper {
 	}
 	
 	public BlobStoreContext getBlobStoreContext() {
+		if ("transient".equals(provider)) {
+			return Optional.ofNullable(blobStoreContext.get()).orElseGet(() -> getBlobStoreContextThreaded());
+		}
+		return getBlobStoreContextInternal();
+	}
+	
+	private BlobStoreContext getBlobStoreContextThreaded() {
+		blobStoreContext.set(getBlobStoreContextInternal());
+		return blobStoreContext.get();
+	}
+	
+	private BlobStoreContext getBlobStoreContextInternal() {
 		return ContextBuilder.newBuilder(provider).credentialsSupplier(credentialsSupplier)
 			    .buildView(BlobStoreContext.class);
+		
+	}
+
+	public JcloudsHelper init(String provider, String identity, String credential, String container) {
+		this.provider = provider;
+		this.identity = identity;
+		this.credential = credential;
+		init();
+		if (container != null) {
+			final BlobStoreContext context = getBlobStoreContext();
+			final BlobStore blobStore = context.getBlobStore();
+			blobStore.createContainerInLocation(null, container);
+		}
+		return this;
+	}
+	public JcloudsHelper init(String jsonKeyFile) {
+		this.provider = "google-cloud-storage";
+		this.jsonKeyFile = jsonKeyFile;
+		init();
+		return this;
 	}
 	
 }
